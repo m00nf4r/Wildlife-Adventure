@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem; // new Input System — used for the keyboard fallback
 #if UNITY_WEBGL && !UNITY_EDITOR
 using System.Runtime.InteropServices;
 #endif
@@ -14,8 +15,10 @@ namespace WildlifeAdventure
     /// position (normalised to roughly [-1..1] around the camera centre) back
     /// here via <see cref="OnNosePosition"/>.
     ///
-    /// In the Editor or on desktop (no webcam plugin) it transparently falls
-    /// back to keyboard/WASD so the game stays fully testable.
+    /// When the camera is unavailable (Editor, desktop, or blocked inside the
+    /// Unity Play iframe) it transparently falls back to keyboard / WASD so the
+    /// game stays fully playable. The fallback uses the new Input System
+    /// (Keyboard.current) so it works no matter how Active Input Handling is set.
     /// </summary>
     public class NoseInput : MonoBehaviour
     {
@@ -142,9 +145,9 @@ namespace WildlifeAdventure
             }
             else
             {
-                // Keyboard fallback (also works alongside the nose for testing).
-                targetX = Input.GetAxisRaw("Horizontal");
-                targetY = Input.GetAxisRaw("Vertical");
+                // Keyboard fallback (new Input System). Works in the Editor and
+                // on Unity Play, where the camera is blocked by the iframe.
+                ReadKeyboard(out targetX, out targetY);
             }
 
             float k = 1f - Mathf.Exp(-smoothing * Time.deltaTime);
@@ -152,11 +155,26 @@ namespace WildlifeAdventure
             smoothY = Mathf.Lerp(smoothY, Mathf.Clamp(targetY, -1f, 1f), k);
         }
 
-        float ApplyDeadzone(float v)
+        /// <summary>WASD + arrow keys via the new Input System.</summary>
+        void ReadKeyboard(out float h, out float v)
         {
-            if (Mathf.Abs(v) < deadzone) return 0f;
-            float sign = Mathf.Sign(v);
-            return sign * (Mathf.Abs(v) - deadzone) / (1f - deadzone);
+            h = 0f;
+            v = 0f;
+
+            var kb = Keyboard.current;
+            if (kb == null) return; // no keyboard attached this frame
+
+            if (kb.dKey.isPressed || kb.rightArrowKey.isPressed) h += 1f;
+            if (kb.aKey.isPressed || kb.leftArrowKey.isPressed)  h -= 1f;
+            if (kb.wKey.isPressed || kb.upArrowKey.isPressed)    v += 1f;
+            if (kb.sKey.isPressed || kb.downArrowKey.isPressed)  v -= 1f;
+        }
+
+        float ApplyDeadzone(float val)
+        {
+            if (Mathf.Abs(val) < deadzone) return 0f;
+            float sign = Mathf.Sign(val);
+            return sign * (Mathf.Abs(val) - deadzone) / (1f - deadzone);
         }
 
         public float Horizontal => smoothX;
