@@ -25,7 +25,6 @@ The featured species are all real and native to the region: the **Malayan Tapir*
 ## ✨ Features
 
 - Free-flight exploration of a hand-illustrated rainforest level
-- **Nose / face controlled flight** — Wira follows the player's nose via the device camera (MediaPipe FaceMesh in WebGL), with keyboard fallback
 - **Three difficulty levels** chosen on the main menu: **Easy (5 questions)**, **Hard (7, timed)**, **Extra Hard (10, fast timer)**
 - **Hidden collectibles** — animals and litter are concealed in foliage and revealed only when Wira flies close (reveal radius shrinks on harder levels)
 - **Solid, deadly trees** — Wira cannot pass through a trunk; hitting one fails the level and it must be restarted
@@ -44,9 +43,8 @@ The featured species are all real and native to the region: the **Malayan Tapir*
 
 | Action | Keys |
 |---|---|
-| Move Wira (primary) | **Move your nose / head** in front of the camera |
 | Move Wira (fallback) | Arrow Keys or WASD (Editor / desktop, or if no camera) |
-| Scan wildlife / Clean pollution | Hover close for a moment (auto), or press E / Space / Enter |
+| Scan wildlife / Clean pollution | Hover close for a moment (auto), or press E |
 | Open / close Field Journal | J |
 
 **Nose control:** when the WebGL build loads, allow camera access. A small mirrored preview appears in the
@@ -71,19 +69,6 @@ Discover all the animals to unlock the **Ranger Outpost** quiz at the far right 
 | Target platform | WebGL (also runs in the Editor and as standalone) |
 
 The entire game is generated from code at runtime by a single `GameBootstrap` script — there is no hand-authored scene, which keeps the project lightweight and version-control friendly.
-
----
-
-## 🚀 Getting started (run it locally)
-
-1. Install **Unity 6** (via Unity Hub).
-2. Open the project in Unity (it will compile automatically).
-3. Make sure the **Unity UI (uGUI)** package is installed: *Window → Package Manager → Unity Registry → search "uGUI" → Install*.
-4. Set the input system: *Edit → Project Settings → Player → Other Settings → **Active Input Handling → Input Manager (Old)*** (the game uses the classic Input Manager).
-5. In the scene, create an empty **GameObject** and add the **`GameBootstrap`** component to it (*Add Component → GameBootstrap*).
-6. Press **Play**, then open the **Game** tab.
-
-With the Firebase fields left blank, the game runs in **offline mode** — perfect for a quick test.
 
 ---
 
@@ -122,25 +107,6 @@ The Web API Key is **not a secret** — it is safe to include in a client build;
 | `wildlifeFacts/{id}` | The Fact Card content |
 | `quizQuestions/{id}` | The quiz bank |
 | `scores/{autoId}` | Leaderboard entries |
-
----
-
-## 🌐 Building for WebGL
-
-1. *File → Build Profiles → Web/WebGL → Switch Platform* (install the WebGL module if prompted).
-2. Add the open scene to the build.
-3. **Build**, then upload the output folder to a static host (itch.io, GitHub Pages, etc.).
-
-Firebase's REST endpoints send permissive CORS headers, so authentication and Firestore calls work from a hosted WebGL build. (They will not work from a `file://` path — the game must be served over http(s).)
-
-### 📷 Camera / nose control requirements (WebGL)
-
-Nose-tracking flight uses the **device webcam** through Google's MediaPipe FaceMesh, loaded from a CDN at runtime by `Assets/Plugins/WebGL/NoseControl.jslib`. For it to work:
-
-- The page **must be served over HTTPS** (or `http://localhost`). Browsers block `getUserMedia` on plain `http://` and on `file://`.
-- The player must **grant camera permission** when prompted. If they deny it (or there is no camera), the game automatically falls back to keyboard control — it never blocks play.
-- The WebGL **template must expose the Unity instance** so the plugin can send nose coordinates back into the game. The included `docs/index.html` already does this with `window.unityInstance = unityInstance;` inside the `createUnityInstance(...).then(...)` callback. If you use a custom template, add that one line.
-- In the **Editor and desktop builds**, nose tracking is inactive and movement uses the keyboard fallback (the camera plugin only runs in WebGL).
 
 ---
 
