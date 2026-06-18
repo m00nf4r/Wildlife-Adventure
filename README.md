@@ -5,6 +5,7 @@ A 2D educational game that raises **biodiversity awareness** in children, set in
 Developed as a **Final Year Project (FYP)**.
 
 > **Built with:** Unity 6 · C# · Cloud Firestore + Firebase Authentication (REST API) · WebGL
+> Click here to play: https://play.unity.com/en/games/52ed64fc-b162-4f79-9ed7-05987446f9c6/wildlife-adventure
 
 ---
 
