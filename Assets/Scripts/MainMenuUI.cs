@@ -68,10 +68,12 @@ namespace WildlifeAdventure
             // ---- Info box (best score + controls) ----
             RawSprite(root, UIShapes.RoundedRect(16), BoxBg, 900, 104, 0, -262, false, Image.Type.Sliced);
             bestText = AddLabel(root, "", 22, BoxText, 880, 28, 0, -232, TextAnchor.MiddleCenter, FontStyle.Bold);
-            AddLabel(root, "Move: Nose / Face (camera)  \u2022  keyboard fallback: Arrow Keys / WASD  \u2022  Journal: J",
+            AddLabel(root, "Move: Arrow Keys / WASD  \u2022  Journal: J",
                 17, BoxText, 880, 24, 0, -260, TextAnchor.MiddleCenter);
             AddLabel(root, "Avoid the trees! Hitting a trunk fails the level. Animals & litter are hidden \u2014 explore to find them.",
                 16, BoxText, 880, 24, 0, -286, TextAnchor.MiddleCenter);
+            AddLabel(root, "Illustrated by Deeja & Myn",
+                15, BoxText, 880, 22, 0, -308, TextAnchor.MiddleCenter, FontStyle.Italic);
 
             RefreshBest();
             Hide();

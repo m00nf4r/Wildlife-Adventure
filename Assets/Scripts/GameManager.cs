@@ -41,7 +41,6 @@ namespace WildlifeAdventure
         public LeaderboardUI leaderboard;
         public LevelFailedUI levelFailed;
         public ContentManagerUI contentManager;
-        public NoseInput noseInput;
 
         UserProfile loadedProfile;   // from cloud, if signed in
         int totalPlays;
@@ -174,7 +173,6 @@ namespace WildlifeAdventure
         {
             SetState(GameState.MainMenu);
             timerRunning = false;
-            StopNose();
             HideAll();
             menu.Show();
         }
@@ -184,7 +182,6 @@ namespace WildlifeAdventure
         {
             SetState(GameState.ContentManager);
             timerRunning = false;
-            StopNose();
             if (menu != null) menu.Hide();
             contentManager.Show(GoToMainMenu);
         }
@@ -224,7 +221,6 @@ namespace WildlifeAdventure
                 hud.Show();
                 hud.Refresh();
                 timerRunning = true;
-                StartNose();   // begin nose-tracking control for exploration
             });
         }
 
@@ -243,23 +239,11 @@ namespace WildlifeAdventure
             if (State == GameState.LevelFailed) return;
             SetState(GameState.LevelFailed);
             timerRunning = false;
-            StopNose();
             if (hud != null) hud.Hide();
             if (dialogue != null) dialogue.Hide();
             if (factCard != null) factCard.Hide();
             if (levelFailed != null)
                 levelFailed.Show(Score, DiscoveredCount, TotalSpecies, RetryLevel, GoToMainMenu);
-        }
-
-        // ---- Nose-tracking control helpers ----
-        void StartNose()
-        {
-            if (noseInput != null) noseInput.StartTracking();
-        }
-
-        void StopNose()
-        {
-            if (noseInput != null) noseInput.StopTracking();
         }
 
         // ---------------- Scoring / discovery ----------------
@@ -329,7 +313,6 @@ namespace WildlifeAdventure
         {
             SetState(GameState.Quiz);
             timerRunning = false;
-            StopNose();
             quiz.Begin((correctCount) =>
             {
                 AddScore(correctCount * 100);

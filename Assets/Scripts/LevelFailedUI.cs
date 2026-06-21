@@ -31,7 +31,7 @@ namespace WildlifeAdventure
                 900, 40, 0, 130);
 
             subText = UIFactory.LabelAt(root,
-                "Trees are solid — steer around the trunks. Keep your nose movements gentle.",
+                "Trees are solid — steer around the trunks. Keep your movements gentle.",
                 22, UIFactory.Hex("FFCDD2"), 820, 70, 0, 60);
 
             statsText = UIFactory.LabelAt(root, "", 22, UIFactory.Amber,

@@ -68,12 +68,6 @@ namespace WildlifeAdventure
             levelFailed.Build();
             contentManager.Build();
 
-            // ----- Nose-tracking input (camera-driven movement for exploration).
-            // The GameObject MUST be named "NoseInput" because the WebGL plugin
-            // calls UnityInstance.SendMessage("NoseInput", ...) by that name.
-            var noseGo = new GameObject("NoseInput");
-            var noseInput = noseGo.AddComponent<NoseInput>();
-
             // ----- Habitat -----
             var habitatGo = new GameObject("HabitatBuilder");
             var habitat = habitatGo.AddComponent<HabitatBuilder>();
@@ -96,7 +90,6 @@ namespace WildlifeAdventure
             gm.leaderboard = leaderboard;
             gm.levelFailed = levelFailed;
             gm.contentManager = contentManager;
-            gm.noseInput = noseInput;
         }
 
         T MakeModule<T>(string name) where T : Component

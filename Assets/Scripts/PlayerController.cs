@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace WildlifeAdventure
 {
@@ -50,18 +51,15 @@ namespace WildlifeAdventure
                 return;
             }
 
-            // Movement comes from nose tracking (NoseInput), which transparently
-            // falls back to keyboard/WASD in the Editor or if the camera is off.
-            float h, v;
-            if (NoseInput.Instance != null)
+            // Movement from the keyboard (new Input System): WASD or arrow keys.
+            float h = 0f, v = 0f;
+            var kb = Keyboard.current;
+            if (kb != null)
             {
-                h = NoseInput.Instance.Horizontal;
-                v = NoseInput.Instance.Vertical;
-            }
-            else
-            {
-                h = Input.GetAxisRaw("Horizontal");
-                v = Input.GetAxisRaw("Vertical");
+                if (kb.dKey.isPressed || kb.rightArrowKey.isPressed) h += 1f;
+                if (kb.aKey.isPressed || kb.leftArrowKey.isPressed)  h -= 1f;
+                if (kb.wKey.isPressed || kb.upArrowKey.isPressed)    v += 1f;
+                if (kb.sKey.isPressed || kb.downArrowKey.isPressed)  v -= 1f;
             }
 
             var dir = new Vector3(h, v, 0f);
